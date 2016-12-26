@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:soapui-actions xmlns:tns="http://eviware.com/soapui/config">
+<tns:action id="ReplaceRequestInAllTestStepsAction" actionClass="bsl.custom.actions.ReplaceRequestInAllTestStepsAction"/>
+<tns:actionGroup id="RestRequestActions">
+  <tns:actionMapping actionId="ReplaceRequestInAllTestStepsAction"/>
+</tns:actionGroup>
+</tns:soapui-actions>
