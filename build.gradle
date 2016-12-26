@@ -1,0 +1,26 @@
+apply plugin: 'groovy'
+version = '1.0'
+
+task wrapper(type: Wrapper) {
+     gradleVersion = '2.2'
+}
+   
+jar {
+	classifier = 'lib'
+    manifest {
+        attributes 'Implementation-Title': 'SoapUI Replace Request In All TestSteps Library','Implementation-Version': version
+	} 
+}
+   
+repositories {
+     mavenCentral()
+     maven { url "http://www.soapui.org/repository/maven2" }
+}
+   
+dependencies {
+	compile(group: 'com.smartbear.soapui', name: 'soapui', version:'5.1.2-m-SNAPSHOT') {
+    exclude(module: 'jms')
+    exclude(module: 'jtidy' )
+    exclude(module: 'cajo' )
+} 
+}
