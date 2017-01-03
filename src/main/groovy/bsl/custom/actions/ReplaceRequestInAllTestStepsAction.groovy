@@ -8,8 +8,6 @@ import com.eviware.soapui.model.testsuite.TestStep
 import com.eviware.soapui.support.action.support.AbstractSoapUIAction
 import org.apache.log4j.Logger
 
-import java.util.List
-
  public class ReplaceRequestInAllTestStepsAction extends AbstractSoapUIAction<RestRequest>{
 
      protected final Logger scriptLogger = Logger.getLogger("groovy.log")
@@ -24,9 +22,7 @@ import java.util.List
     public void perform( RestRequest restRequest, Object param ) {
         scriptLogger.info("clicked!")
 
-
-
-        List<TestStep> relatedTestSteps = relatedTestStepsSelector.selectMatchingTestSteps(restRequest)
+        List<TestStep> relatedTestSteps = relatedTestStepsSelector.selectMatchingRESTRequestTestSteps(restRequest)
 
         String newRequestContent = restRequest.requestContent
         String updateAdvice = relatedTestStepsUpdater.replaceContentInRelatedTestSteps(relatedTestSteps, newRequestContent)
