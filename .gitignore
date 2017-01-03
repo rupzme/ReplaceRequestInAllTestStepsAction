@@ -15,3 +15,6 @@ gradle-app.setting
 
 #Ignore intellij files
 .idea
+
+#Ignore SoapUI log files
+.log
