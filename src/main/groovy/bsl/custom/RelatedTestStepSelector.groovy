@@ -12,7 +12,7 @@ import com.eviware.soapui.model.project.Project
 import com.eviware.soapui.model.testsuite.TestStep
 import com.eviware.soapui.model.testsuite.TestSuite
 
-class RelatedTestStepsSelector {
+class RelatedTestStepSelector implements TestStepSelector{
 
     protected final Logger scriptLogger = Logger.getLogger("groovy.log")
 

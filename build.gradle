@@ -18,7 +18,10 @@ repositories {
 }
    
 dependencies {
-	compile(group: 'com.smartbear.soapui', name: 'soapui', version:'5.1.2-m-SNAPSHOT') {
+    testCompile "net.bytebuddy:byte-buddy:1.4.33"
+    testCompile "org.objenesis:objenesis:1.2"
+    testCompile "org.spockframework:spock-core:1.1-groovy-2.0-rc-3"
+	compile(group: 'com.smartbear.soapui', name: 'soapui', version:'5.3.1-RC') {
     exclude(module: 'jms')
     exclude(module: 'jtidy' )
     exclude(module: 'cajo' )

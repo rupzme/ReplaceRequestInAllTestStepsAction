@@ -17,4 +17,7 @@ gradle-app.setting
 .idea
 
 #Ignore SoapUI log files
-.log
+soapui-errors.log
+global-groovy.log
+soapui.log
+
