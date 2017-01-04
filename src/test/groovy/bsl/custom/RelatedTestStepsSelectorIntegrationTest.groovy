@@ -1,7 +1,10 @@
 package bsl.custom
 
 import com.eviware.soapui.impl.actions.RestServiceBuilder
+import com.eviware.soapui.impl.rest.RestMethod
 import com.eviware.soapui.impl.rest.RestRequest
+import com.eviware.soapui.impl.rest.RestRequestInterface
+import com.eviware.soapui.impl.rest.RestResource
 import com.eviware.soapui.impl.wsdl.WsdlProject
 import com.eviware.soapui.impl.wsdl.teststeps.registry.RestRequestStepFactory
 import com.eviware.soapui.model.testsuite.TestCase
@@ -9,30 +12,24 @@ import com.eviware.soapui.model.testsuite.TestStep
 
 /**
  * Created by Rupert on 02/01/2017.
+ *
+ *  The structure of a SoapUI REST service is:
+ *  Project (Even REST Projects are 'WsdlProject' objects)
+ *      -> RestService(s) (type of 'Interface' - has an associated Endpoint)
+ *          -> RestResource(s) (type of 'Operation')
+ *              -> Method(s)
+ *                  -> request(s)
  */
 class RelatedTestStepsSelectorIntegrationTest extends GroovyTestCase{
 
     RelatedTestStepSelector relatedTestStepsSelector = new RelatedTestStepSelector()
-    //RestRequest restRequest = new RestRequest()
-
-//    protected void setUp(){
-
-  //  }
-
-    //void testShouldGetTestStepsFromAllTesSuitesInRestRequestProject(){
-
-//    }
-
-  //  void testShouldReturnPOSTTestStepsThatMatchRestRequestEndpoint(){
-
-//    }
 
     void testShouldReturnEmptyListIfProjectHasNoTestSteps(){
         def uri = "http://jsonplaceholder.typicode.com/posts/1"
 
         WsdlProject project = new WsdlProject()
         RestServiceBuilder serviceBuilder = new RestServiceBuilder()
-        serviceBuilder.createRestService(project, uri)
+        serviceBuilder.createRestService(project, uri) //Creates
 
         List<TestStep> testSteps = relatedTestStepsSelector.getAllTestStepsFromTesSuitesInRestRequestProject(project)
 
@@ -44,25 +41,37 @@ class RelatedTestStepsSelectorIntegrationTest extends GroovyTestCase{
     //a) POST / PUT methods
     //b) only select TestSteps that match the same Service Endpoint
     //c) Assert that exactly the expected test steps are returned.
+    /**
+     *
+     * Create a test setup like:
+     * -project
+     * --interface
+     * ---
+     */
     void testShouldReturnTestStepsListIfProjectTestSteps(){
         def uri = "http://jsonplaceholder.typicode.com/posts/1"
 
         WsdlProject project = new WsdlProject()
         RestServiceBuilder serviceBuilder = new RestServiceBuilder()
+
+        //Create a default RestService(no endpoint)->RestResource(empty)->Method(GET)->RestRequest
         serviceBuilder.createRestService(project, uri)
         TestCase testCase1 = project.addNewTestSuite("TestSuite1").addNewTestCase("TestCase1")
 
         RestRequest restRequest1 = project.getInterfaceList()[0].getOperationList()[0].getRequestList()[0]
-        restRequest1.setName("restTestStep1")
+        testCase1.addTestStep(RestRequestStepFactory.createConfig(restRequest1, "restTestStep1"))
 
-        //TODO extract creation of Test Rest TestSteps to a private method
-        testCase1.addTestStep(RestRequestStepFactory.createConfig(restRequest1, restRequest1.getName()));
+        RestResource restResource1 = project.getInterfaceList()[0].getOperationList()[0]
+        RestMethod restMethod1 = restResource1.addNewMethod("method1")
+        restMethod1.setMethod(RestRequestInterface.HttpMethod.POST)
+        RestRequest restRequest2 = restMethod1.addNewRequest("restRequest1")
+        testCase1.addTestStep(RestRequestStepFactory.createConfig(restRequest2, "restTestStep2"))
 
-        //println testCase1.getTestStepCount()
+        println testCase1.getTestStepCount()
 
         List<TestStep> testSteps = relatedTestStepsSelector.getAllTestStepsFromTesSuitesInRestRequestProject(project)
 
-        assertTrue testSteps.size() == 1
+        assertTrue testSteps.size() == 2
     }
 
     /*
