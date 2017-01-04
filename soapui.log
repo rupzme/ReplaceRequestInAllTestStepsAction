@@ -1,4 +1,0 @@
-2017-01-03 23:24:33,177 WARN  [SoapUI] Missing folder [C:\Users\bears\blogstuff\ReplaceRequestInAllTestStepsAction\ext] for external libraries
-2017-01-03 23:24:33,314 INFO  [DefaultSoapUICore] initialized soapui-settings from [C:\Users\bears\soapui-settings.xml]
-2017-01-03 23:24:33,895 INFO  [log] test suite name: TestSuite1
-2017-01-03 23:24:33,895 INFO  [log] test case name: TestCase1
