@@ -45,8 +45,14 @@ class RelatedTestStepsSelectorIntegrationTest extends GroovyTestCase{
      *
      * Create a test setup like:
      * -project
-     * --interface
-     * ---
+     * --RestService
+     * ---RestResource
+     * ----RestMethod (GET)
+     * -----RestRequest
+     * ---RestResource
+     * ----RestMethod (POST)
+     * -----RestRequest
+     *
      */
     void testShouldReturnTestStepsListIfProjectTestSteps(){
         def uri = "http://jsonplaceholder.typicode.com/posts/1"
