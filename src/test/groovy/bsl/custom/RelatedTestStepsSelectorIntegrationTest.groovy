@@ -54,6 +54,7 @@ class RelatedTestStepsSelectorIntegrationTest extends GroovyTestCase{
      * -----RestRequest
      *
      */
+    //TODO Work out how a RestRequest is related to TestSteps based on it - is it the RestRequestConfig?
     void testShouldReturnTestStepsListIfProjectTestSteps(){
         def uri = "http://jsonplaceholder.typicode.com/posts/1"
 
