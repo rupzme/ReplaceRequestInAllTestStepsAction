@@ -10,5 +10,5 @@ import com.eviware.soapui.model.testsuite.TestStep
  */
 interface TestStepSelector {
     List<RestTestRequest> selectMatchingRESTRequestTestSteps(RestRequest restRequest)
-    List<TestStep> getAllTestStepsFromTesSuitesInRestRequestProject(Project project)
+    List<TestStep> getAllRestRequestTestStepsInProjectWithRequestBodies(Project project)
 }
