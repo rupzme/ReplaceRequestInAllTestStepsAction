@@ -24,7 +24,7 @@ class RelatedTestStepSelector implements TestStepSelector{
     List<RestTestRequestStep> selectMatchingRESTRequestTestSteps(RestRequest restRequest){
         Project project = restRequest.getProject()
         List<RestTestRequestStep> restTestSteps = getAllRestRequestTestStepsInProjectWithRequestBodies(project)
-        List<RestTestRequestStep> matchingRestTestRequestSteps = null
+        List<RestTestRequestStep> matchingRestTestRequestSteps = new ArrayList<RestTestRequestStep>()
 
         restTestSteps.each{restTestStep ->
             if (restTestStep.getTestRequest().getId()==restRequest.getId()) {
