@@ -1,4 +1,4 @@
-package bsl.custom.bsl.custom.actions
+package bsl.custom.actions
 
 import bsl.custom.TestStepSelector
 import bsl.custom.TestStepUpdater

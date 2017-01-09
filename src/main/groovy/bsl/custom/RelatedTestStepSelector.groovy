@@ -25,12 +25,12 @@ class RelatedTestStepSelector implements TestStepSelector{
         Project project = restRequest.getProject()
         List<RestTestRequestStep> restTestSteps = getAllRestRequestTestStepsInProjectWithRequestBodies(project)
         List<RestTestRequestStep> matchingRestTestRequestSteps = null
-        scriptLogger.info "---restRequest getId(): "+restRequest.getId()
+
         restTestSteps.each{restTestStep ->
-            //scriptLogger.info "TestSTep getId(): " + restTestStep.getId()
-            scriptLogger.info "getTestRequest getId(): " + restTestStep.getTestRequest().getId()
-            if (restTestStep.getTestRequest().getId()==restRequest.getId())
-                    matchingRestTestRequestSteps << restTestStep
+            if (restTestStep.getTestRequest().getId()==restRequest.getId()) {
+                scriptLogger.info "Found matching REST TestStep - " + restTestStep.name
+                matchingRestTestRequestSteps << restTestStep
+            }
         }
         return matchingRestTestRequestSteps
     }
