@@ -28,7 +28,7 @@ import org.apache.log4j.Logger
         List<RestTestRequestStep> relatedTestSteps = testStepsSelector.selectMatchingRESTRequestTestSteps(restRequest)
 
         //TODO Change to return number of test cases updated (int) ? Not sure wouldn't a the names of the updated TestSteps be better?
-        String updateAdvice = testStepsUpdater.replaceContentInRelatedTestSteps(relatedTestSteps, restRequest)
+        int updateAdvice = testStepsUpdater.replaceContentInRelatedTestSteps(relatedTestSteps, restRequest)
         scriptLogger.info("updateAdvice="+updateAdvice)
 	}
 }

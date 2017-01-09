@@ -14,7 +14,13 @@ class RelatedTestStepUpdater implements TestStepUpdater{
      * @param restRequest - The REST request which has the updated request content.
      * @return
      */
-    public String replaceContentInRelatedTestSteps(List<RestTestRequestStep> relatedTestSteps, RestRequest restRequest){
-        return null
+    public int replaceContentInRelatedTestSteps(List<RestTestRequestStep> relatedTestSteps, RestRequest restRequest){
+        int updateCount=0
+        relatedTestSteps.each{restTestStep ->
+            restTestStep.httpRequest.requestContent=restRequest.requestContent
+            updateCount++
+        }
+
+        return updateCount
     }
 }

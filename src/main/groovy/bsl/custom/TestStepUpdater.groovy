@@ -8,5 +8,5 @@ import com.eviware.soapui.model.testsuite.TestStep
  * Created by Rupert Anderson on 04/01/17.
  */
 interface TestStepUpdater {
-    public String replaceContentInRelatedTestSteps(List<RestTestRequestStep> relatedTestSteps, RestRequest restRequest)
+    public int replaceContentInRelatedTestSteps(List<RestTestRequestStep> relatedTestSteps, RestRequest restRequest)
 }
