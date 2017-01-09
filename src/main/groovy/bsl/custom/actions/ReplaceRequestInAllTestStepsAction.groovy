@@ -5,7 +5,7 @@ import bsl.custom.RelatedTestStepUpdater
 import bsl.custom.TestStepSelector
 import bsl.custom.TestStepUpdater
 import com.eviware.soapui.impl.rest.RestRequest
-import com.eviware.soapui.model.testsuite.TestStep
+import com.eviware.soapui.impl.wsdl.teststeps.RestTestRequestStep
 import com.eviware.soapui.support.action.support.AbstractSoapUIAction
 import org.apache.log4j.Logger
 
@@ -25,11 +25,10 @@ import org.apache.log4j.Logger
     public void perform( RestRequest restRequest, Object param ) {
         scriptLogger.info("clicked!")
 
-        List<TestStep> relatedTestSteps = testStepsSelector.selectMatchingRESTRequestTestSteps(restRequest)
+        List<RestTestRequestStep> relatedTestSteps = testStepsSelector.selectMatchingRESTRequestTestSteps(restRequest)
 
-        String newRequestContent = restRequest.requestContent
-        //TODO Change to return number of test cases updated (int)
-        String updateAdvice = testStepsUpdater.replaceContentInRelatedTestSteps(relatedTestSteps, newRequestContent)
+        //TODO Change to return number of test cases updated (int) ? Not sure wouldn't a the names of the updated TestSteps be better?
+        String updateAdvice = testStepsUpdater.replaceContentInRelatedTestSteps(relatedTestSteps, restRequest)
         scriptLogger.info("updateAdvice="+updateAdvice)
 	}
 }

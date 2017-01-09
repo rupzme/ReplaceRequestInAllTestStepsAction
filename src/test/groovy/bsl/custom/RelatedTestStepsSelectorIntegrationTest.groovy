@@ -42,8 +42,6 @@ class RelatedTestStepsSelectorIntegrationTest extends GroovyTestCase{
     }
 
     //TODO Next steps:
-    //-Create more Test TestSteps of different Types (check they don't break - separate test?) / methods (GET etc) / endpoints and test that selector will extract just
-    //b) only select TestSteps that match the same Service Endpoint
     //c) Assert that exactly the expected test steps are returned.
     /**
      *
@@ -143,7 +141,7 @@ class RelatedTestStepsSelectorIntegrationTest extends GroovyTestCase{
     }
 
     /**
-     * Test that non REST TestSteps are not selected.
+     * Test that non REST TestSteps are not selected (and do not break anything).
      */
     void testShouldOnlyReturnRestTestSteps(){
         WsdlProject project = new WsdlProject()
@@ -168,6 +166,7 @@ class RelatedTestStepsSelectorIntegrationTest extends GroovyTestCase{
         List<TestStep> testSteps = relatedTestStepsSelector.getAllRestRequestTestStepsInProjectWithRequestBodies(project)
 
         assert testSteps.size()==0
-
     }
+
+    //TODO need to test selectMatchingRESTRequestTestSteps
 }

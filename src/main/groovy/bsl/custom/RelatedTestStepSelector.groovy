@@ -15,17 +15,24 @@ class RelatedTestStepSelector implements TestStepSelector{
 
     protected final Logger scriptLogger = Logger.getLogger("groovy.log")
 
-    List<RestTestRequest> selectMatchingRESTRequestTestSteps(RestRequest restRequest){
+    /**
+     * Find all TestSteps for a REST request
+     *
+     * @param restRequest - The REST request to find matching TestSteps for
+     * @return List<RestTestRequestStep> - The list of matching TestSteps
+     */
+    List<RestTestRequestStep> selectMatchingRESTRequestTestSteps(RestRequest restRequest){
         Project project = restRequest.getProject()
         List<RestTestRequestStep> restTestSteps = getAllRestRequestTestStepsInProjectWithRequestBodies(project)
+        List<RestTestRequestStep> matchingRestTestRequestSteps = null
         scriptLogger.info "---restRequest getId(): "+restRequest.getId()
         restTestSteps.each{restTestStep ->
-            scriptLogger.info "Service: "+restTestStep.getService()
-            scriptLogger.info "HttpRequest getId(): "+restTestStep.getHttpRequest().getId()
-            scriptLogger.info "TestSTep getId(): " + restTestStep.getId()
+            //scriptLogger.info "TestSTep getId(): " + restTestStep.getId()
             scriptLogger.info "getTestRequest getId(): " + restTestStep.getTestRequest().getId()
+            if (restTestStep.getTestRequest().getId()==restRequest.getId())
+                    matchingRestTestRequestSteps << restTestStep
         }
-        return null
+        return matchingRestTestRequestSteps
     }
 
     /**
