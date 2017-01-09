@@ -2,7 +2,11 @@
 
 ##Phase 1 : Custom SoapUI Action extension
 
-See related blog article (http://rupertanderson.com/blog/replace-request-teststeps-plugin/)
+Adds a SoapUI menu action on the REST request that replaces the request content in all related TestSteps when clicked.
+
+For usage and documentation please see the related blog article at:
+
+(http://rupertanderson.com/blog/replace-request-teststeps-plugin/)
 
 ###Installation
 
@@ -11,8 +15,8 @@ See related blog article (http://rupertanderson.com/blog/replace-request-testste
 2. Copy `<project home>/actions/custom-actions.xml` to `<SoapUI Home>/java/app/bin/actions/`
 
 ###Tasks
-- [x] Create SoapUI Action config & stub class
 - [x] Create tests
 - [x] Code functionality
 - [x] Refactored tests and implementation to get 100% coverage
 - [x] Have done basic manual testing in SoapUI
+- [ ] Add Gradle wrapper

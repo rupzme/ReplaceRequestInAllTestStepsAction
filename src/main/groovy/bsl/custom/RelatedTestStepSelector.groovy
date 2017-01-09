@@ -33,7 +33,7 @@ class RelatedTestStepSelector implements TestStepSelector{
                 List<RestTestRequestStep> restTestSteps = testCase.getTestStepsOfType(RestTestRequestStep.class)
                 restTestSteps.each {restTestStep ->
                     if (restTestStep.getTestRequest().getId()==restRequest.getId()) {
-                        scriptLogger.info "Found matching TestStep - " + restTestStep.name + "]"
+                        scriptLogger.info "Found matching TestStep [" + restTestStep.name + "]"
                         matchingRestTestRequestSteps << restTestStep
                     }
                 }
