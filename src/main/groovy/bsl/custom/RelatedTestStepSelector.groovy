@@ -7,7 +7,6 @@ import com.eviware.soapui.impl.wsdl.teststeps.RestTestRequestStep
 import com.eviware.soapui.model.testsuite.TestCase
 import org.apache.log4j.Logger
 import com.eviware.soapui.impl.rest.RestRequest
-import com.eviware.soapui.impl.wsdl.teststeps.RestTestRequest
 import com.eviware.soapui.model.project.Project
 import com.eviware.soapui.model.testsuite.TestSuite
 
@@ -23,39 +22,23 @@ class RelatedTestStepSelector implements TestStepSelector{
      */
     List<RestTestRequestStep> selectMatchingRESTRequestTestSteps(RestRequest restRequest){
         Project project = restRequest.getProject()
-        List<RestTestRequestStep> restTestSteps = getAllRestRequestTestStepsInProjectWithRequestBodies(project)
         List<RestTestRequestStep> matchingRestTestRequestSteps = new ArrayList<RestTestRequestStep>()
 
-        restTestSteps.each{restTestStep ->
-            if (restTestStep.getTestRequest().getId()==restRequest.getId()) {
-                scriptLogger.info "Found matching REST TestStep - " + restTestStep.name
-                matchingRestTestRequestSteps << restTestStep
-            }
-        }
-        return matchingRestTestRequestSteps
-    }
-
-    /**
-     * Extract a List of RestTestSteps that can have request content
-     *  i.e. the TestStep Type is RestTestRequestStep and has a Method of either POST,PUT,PATCH or DELETE.
-     * @param project
-     * @return List<TestStep>
-     */
-    List<RestTestRequestStep> getAllRestRequestTestStepsInProjectWithRequestBodies(Project project){
-        List<RestTestRequestStep> selectedTestSteps = new ArrayList<RestTestRequestStep>()
-        List<TestSuite> testSuites = project.getTestSuiteList()
+        List<TestSuite> testSuites = project.testSuiteList
         testSuites.each{testSuite ->
-            scriptLogger.info "test suite name: "+testSuite.name
-            List<TestCase> testCases = testSuite.getTestCaseList()
+            scriptLogger.info "Searching TestSuite name ["+testSuite.name+"] for matching TestSteps..."
+            List<TestCase> testCases = testSuite.testCaseList
             testCases.each{testCase ->
-                scriptLogger.info "test case name: "+testCase.name
+                scriptLogger.info "Searching TestCase ["+testCase.name+"] for matching TestSteps..."
                 List<RestTestRequestStep> restTestSteps = testCase.getTestStepsOfType(RestTestRequestStep.class)
                 restTestSteps.each {restTestStep ->
-                    scriptLogger.info "test step name: "+restTestStep.name+" method: "+restTestStep.restMethod.method
-                    if (restTestStep.restMethod.hasRequestBody()) selectedTestSteps.add(restTestStep)
+                    if (restTestStep.getTestRequest().getId()==restRequest.getId()) {
+                        scriptLogger.info "Found matching TestStep - " + restTestStep.name + "]"
+                        matchingRestTestRequestSteps << restTestStep
+                    }
                 }
             }
         }
-        return selectedTestSteps
+        return matchingRestTestRequestSteps
     }
 }

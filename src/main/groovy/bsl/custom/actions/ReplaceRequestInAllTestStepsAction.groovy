@@ -23,12 +23,8 @@ import org.apache.log4j.Logger
     
     @Override
     public void perform( RestRequest restRequest, Object param ) {
-        scriptLogger.info("clicked!")
-
         List<RestTestRequestStep> relatedTestSteps = testStepsSelector.selectMatchingRESTRequestTestSteps(restRequest)
-
-        //TODO Change to return number of test cases updated (int) ? Not sure wouldn't a the names of the updated TestSteps be better?
         int updateAdvice = testStepsUpdater.replaceContentInRelatedTestSteps(relatedTestSteps, restRequest)
-        scriptLogger.info("updateAdvice="+updateAdvice)
+        scriptLogger.info("Total test steps updated="+updateAdvice)
 	}
 }

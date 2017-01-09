@@ -1,6 +1,5 @@
 package bsl.custom
 
-import com.eviware.soapui.config.TestStepConfig
 import com.eviware.soapui.impl.actions.RestServiceBuilder
 import com.eviware.soapui.impl.rest.RestMethod
 import com.eviware.soapui.impl.rest.RestRequest
@@ -20,13 +19,17 @@ class RelatedTestStepUpdaterTest extends GroovyTestCase{
     public static final String request3Content = "request content 3"
     public static final String request2Content = "request content 2"
     public static final String request4Content = "request content 4"
+
     RelatedTestStepUpdater relatedTestStepUpdater = new RelatedTestStepUpdater()
     def endpointURI = "http://test.com"
 
+    /**
+     * Test that only matching teststeps are updated and that correct number of updated steps
+     * is returned.
+     */
     void testShouldUpdateContentForEachTestStepInListButNoOthersInProject(){
 
         //GIVEN
-
         WsdlProject project = new WsdlProject()
         RestServiceBuilder serviceBuilder = new RestServiceBuilder()
 

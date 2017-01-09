@@ -12,5 +12,7 @@ See related blog article (http://rupertanderson.com/blog/replace-request-testste
 
 ###Tasks
 - [x] Create SoapUI Action config & stub class
-- [] Create tests
-- [] Code functionality
+- [x] Create tests
+- [x] Code functionality
+- [x] Refactored tests and implementation to get 100% coverage
+- [x] Have done basic manual testing in SoapUI

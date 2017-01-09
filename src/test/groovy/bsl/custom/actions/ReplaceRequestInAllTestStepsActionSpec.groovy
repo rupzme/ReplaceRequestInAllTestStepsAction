@@ -11,7 +11,7 @@ import com.eviware.soapui.impl.rest.RestRequestInterface
  */
 
 //TODO Improve test to stub testStepSelector.. to return a List<TestStep>
-//TODO Improve test to stub restRequest.requestContent to return a string
+//TODO Improve test to stub restRequest.requestContent to return an int
 //TODO and add this as a parameter when checking invocation of testStepUpdater.replaceContentInRelatedTestSteps
 class ReplaceRequestInAllTestStepsActionSpec extends spock.lang.Specification {
 

@@ -14,7 +14,7 @@ import com.eviware.soapui.model.testsuite.TestStep
 /**
  * Created by Rupert on 02/01/2017.
  *
- *  The structure of a SoapUI REST service is:
+ *  Just for reference, the general structure of a SoapUI REST service is:
  *  Project (Even REST Projects are 'WsdlProject' objects)
  *      -> RestService(s) (type of 'Interface' - has an associated Endpoint)
  *          -> RestResource(s) (type of 'Operation')
@@ -34,16 +34,18 @@ class RelatedTestStepsSelectorIntegrationTest extends GroovyTestCase{
 
         WsdlProject project = new WsdlProject()
         RestServiceBuilder serviceBuilder = new RestServiceBuilder()
-        serviceBuilder.createRestService(project, endpointURI) //Creates
+        serviceBuilder.createRestService(project, endpointURI)
 
-        List<TestStep> testSteps = relatedTestStepsSelector.getAllRestRequestTestStepsInProjectWithRequestBodies(project)
+        RestRequest restRequest = project.getInterfaceList()[0].getOperationList()[0].getRequestList()[0]
+
+        List<TestStep> testSteps = relatedTestStepsSelector.selectMatchingRESTRequestTestSteps(restRequest)
 
         assertTrue testSteps.size() == 0
     }
 
-    //TODO Next steps:
-    //c) Assert that exactly the expected test steps are returned.
     /**
+     * This test aims to test whether the selection code can match only TestSteps from the
+     * selected REST request in a varied project structure.
      *
      * Create a test setup like:
      * -project
@@ -55,25 +57,33 @@ class RelatedTestStepsSelectorIntegrationTest extends GroovyTestCase{
      * ----RestMethod (POST)
      * -----RestRequest (restRequest2)
      *
-     * -TestSuite
-     * --TestCase
-     * ---REST TestStep (for request1 / GET / Should NOT be selected)
-     * ---REST TestStep (for request2 / POST / Should be selected)
-     * ---REST TestStep (for request3 / PUT / Should be selected)
-     * ---REST TestStep (for request4 / PATCH / Should be selected)
-     * ---REST TestStep (for request5 / DELETE / Should be selected)
-     * ---REST TestStep (for request5 / HEAD / Should NOT be selected)
-     * ---REST TestStep (for request5 / TRACE / Should NOT be selected)
-     * ---REST TestStep (for request5 / OPTIONS / Should NOT be selected)
+     * -TestSuite1
+     * --TestCase1
+     * ---REST TestStep (for request1 / GET)
+     * ---REST TestStep (for request2 / POST)
+     * ---REST TestStep (for request3 / PUT)
+     * ---REST TestStep (for request4 / PATCH - restTestStep4)
+     * ---REST TestStep (for request5 / DELETE)
+     * ---REST TestStep (for request6 / HEAD)
+     * ---REST TestStep (for request7 / TRACE)
+     * ---REST TestStep (for request8 / OPTIONS)
+     *
+     * -TestSuite2
+     * --TestCase2
+     * ---Groovy TestStep
+     * ---JDBC TestStep
+     * ---Properties TestStep
+     * ---Transfer TestStep
+     * ---Call TestCase TestStep
+     * ---TestRequest TestStep
+     * ---Manual TestStep
+     * ---REST TestStep (for request4 / PATCH - restTestStep9)
+     *
+     * Selecting request4 should return only restTestStep4 and restTestStep9.
      */
-    //TODO Work out how a RestRequest is related to TestSteps based on it - is it the RestRequestConfig?
-    //TODO How best to identify TestSteps for the RestRequest that was right-clicked? We could use:
-    // -Service endpoint & method type (and possibly 'name') & resource - need to see what happens in case:
-    //  -multiple RestRequests & related TestSteps under the same method - how does SoapUI differentiate related TestSteps?
-    //  -Need a separate test for this edge case
+    void testShouldOnlyReturnRestTestStepsThatAreRelatedToTheSelectedRestRequest(){
 
-    void testShouldOnlyReturnRestTestStepsThatHaveARequestBody(){
-
+        //GIVEN
         WsdlProject project = new WsdlProject()
         RestServiceBuilder serviceBuilder = new RestServiceBuilder()
 
@@ -102,7 +112,7 @@ class RelatedTestStepsSelectorIntegrationTest extends GroovyTestCase{
         RestMethod restMethod4 = restResource1.addNewMethod("method4")
         restMethod4.setMethod(RestRequestInterface.HttpMethod.PATCH)
         RestRequest restRequest4 = restMethod4.addNewRequest("restRequest4")
-        testCase1.addTestStep(RestRequestStepFactory.createConfig(restRequest4, "restTestStep4"))
+        def restTestStep4 = testCase1.addTestStep(RestRequestStepFactory.createConfig(restRequest4, "restTestStep4"))
 
         //Add DELETE TestStep
         RestMethod restMethod5 = restResource1.addNewMethod("method5")
@@ -128,45 +138,26 @@ class RelatedTestStepsSelectorIntegrationTest extends GroovyTestCase{
         RestRequest restRequest8 = restMethod8.addNewRequest("restRequest8")
         testCase1.addTestStep(RestRequestStepFactory.createConfig(restRequest8, "restTestStep8"))
 
-        println testCase1.getTestStepCount()
+        TestCase testCase2 = project.addNewTestSuite("TestSuite2").addNewTestCase("TestCase2")
 
-        List<TestStep> testSteps = relatedTestStepsSelector.getAllRestRequestTestStepsInProjectWithRequestBodies(project)
+        testCase2.addTestStep("groovy",'TestGroovyTestStep')
+        //testCase2.addTestStep("httprequest",'TestHttpRequestTestStep') //TODO need to create with buildTestStep
+        testCase2.addTestStep("jdbc",'TestJDBCTestStep')
+        testCase2.addTestStep("properties",'TestPropertiesTestStep')
+        testCase2.addTestStep("transfer",'TestTransferTestStep')
+        testCase2.addTestStep("calltestcase",'TestCallTestcaseTestStep')
+        testCase2.addTestStep("request",'TestRequestTestStep')
+        testCase2.addTestStep("manualTestStep",'TestJDBCManualTestStep')
+        //testCase2.addTestStep("mockresponse",'TestJDBCMockResponseTestStep')  //TODO need to create with buildTestStep
+        def restTestStep9 = testCase2.addTestStep(RestRequestStepFactory.createConfig(restRequest4, "restTestStep9"))
 
-        assert testSteps.size()==4
+        //WHEN
+        List<TestStep> testSteps = relatedTestStepsSelector.selectMatchingRESTRequestTestSteps(restRequest4)
 
-        testSteps.each{testStep ->
-            assert testStep.class == com.eviware.soapui.impl.wsdl.teststeps.RestTestRequestStep
-            assert ((RestTestRequestStep)testStep).restMethod.hasRequestBody()
-        }
+        //THEN
+        assert testSteps.size()==2
+        assert testSteps.contains(restTestStep4)
+        assert testSteps.contains(restTestStep9)
+
     }
-
-    /**
-     * Test that non REST TestSteps are not selected (and do not break anything).
-     */
-    void testShouldOnlyReturnRestTestSteps(){
-        WsdlProject project = new WsdlProject()
-        RestServiceBuilder serviceBuilder = new RestServiceBuilder()
-
-        //Create a default RestService(no endpoint)->RestResource(empty)->Method(GET)->RestRequest
-        serviceBuilder.createRestService(project, endpointURI)
-        TestCase testCase1 = project.addNewTestSuite("TestSuite1").addNewTestCase("TestCase1")
-
-        testCase1.addTestStep("groovy",'TestGroovyTestStep')
-        //testCase1.addTestStep("httprequest",'TestHttpRequestTestStep') //TODO need to create with buildTestStep
-        testCase1.addTestStep("jdbc",'TestJDBCTestStep')
-        testCase1.addTestStep("properties",'TestPropertiesTestStep')
-        testCase1.addTestStep("transfer",'TestTransferTestStep')
-        testCase1.addTestStep("calltestcase",'TestCallTestcaseTestStep')
-        testCase1.addTestStep("request",'TestRequestTestStep')
-        testCase1.addTestStep("manualTestStep",'TestJDBCManualTestStep')
-        //testCase1.addTestStep("mockresponse",'TestJDBCMockResponseTestStep')  //TODO need to create with buildTestStep
-
-        println testCase1.getTestStepCount()
-
-        List<TestStep> testSteps = relatedTestStepsSelector.getAllRestRequestTestStepsInProjectWithRequestBodies(project)
-
-        assert testSteps.size()==0
-    }
-
-    //TODO need to test selectMatchingRESTRequestTestSteps
 }
