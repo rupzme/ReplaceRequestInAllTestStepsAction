@@ -12,7 +12,9 @@ For usage and documentation please see the related blog article at:
 
 1. To build: `./gradlew clean build` or `gradle clean build` (if you have Gradle installed)
 2. Copy `<project home>/build/libs/ReplaceRequestInAllTestStepsAction-1.0-lib.jar` to `<SoapUI Home>/java/app/bin/ext/`
-2. Copy `<project home>/src/main/resources/custom-actions.xml` to `<SoapUI Home>/java/app/bin/actions/`
+3. Copy `<project home>/src/main/resources/custom-actions.xml` to `<SoapUI Home>/java/app/bin/actions/`
+4. Start / restart SoapUI
 
 ###Tasks Remaining
 - [x] Have done basic manual testing in SoapUI
+- [ ] Release to SoapUI community and get feedback
