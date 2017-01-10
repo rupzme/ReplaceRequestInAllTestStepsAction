@@ -6,6 +6,7 @@ import bsl.custom.TestStepSelector
 import bsl.custom.TestStepUpdater
 import com.eviware.soapui.impl.rest.RestRequest
 import com.eviware.soapui.impl.wsdl.teststeps.RestTestRequestStep
+import com.eviware.soapui.support.UISupport
 import com.eviware.soapui.support.action.support.AbstractSoapUIAction
 import org.apache.log4j.Logger
 
@@ -24,7 +25,14 @@ import org.apache.log4j.Logger
     @Override
     public void perform( RestRequest restRequest, Object param ) {
         List<RestTestRequestStep> relatedTestSteps = testStepsSelector.selectMatchingRESTRequestTestSteps(restRequest)
-        int updateAdvice = testStepsUpdater.replaceContentInRelatedTestSteps(relatedTestSteps, restRequest)
-        scriptLogger.info("Total test steps updated="+updateAdvice)
+        int stepsUpdated = testStepsUpdater.replaceContentInRelatedTestSteps(relatedTestSteps, restRequest)
+        UISupport.showInfoMessage(buildUpdateMessage(stepsUpdated, restRequest))
 	}
+
+     String buildUpdateMessage(int stepsUpdated, RestRequest restRequest){
+         if (stepsUpdated>0)
+            return "$stepsUpdated TestSteps for request $restRequest.name have been found and updated."
+         else
+             return "No TestSteps have been found for request $restRequest.name"
+     }
 }
