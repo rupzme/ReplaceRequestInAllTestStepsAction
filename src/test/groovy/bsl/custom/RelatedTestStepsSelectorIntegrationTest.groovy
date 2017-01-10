@@ -6,7 +6,6 @@ import com.eviware.soapui.impl.rest.RestRequest
 import com.eviware.soapui.impl.rest.RestRequestInterface
 import com.eviware.soapui.impl.rest.RestResource
 import com.eviware.soapui.impl.wsdl.WsdlProject
-import com.eviware.soapui.impl.wsdl.teststeps.RestTestRequestStep
 import com.eviware.soapui.impl.wsdl.teststeps.registry.RestRequestStepFactory
 import com.eviware.soapui.model.testsuite.TestCase
 import com.eviware.soapui.model.testsuite.TestStep

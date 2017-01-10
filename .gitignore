@@ -21,3 +21,7 @@ soapui-errors.log
 global-groovy.log
 soapui.log
 
+#Ignore mac files
+DS_Store
+
+
