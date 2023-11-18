@@ -6,7 +6,7 @@ Adds a SoapUI menu action on the REST request that replaces the request content 
 
 For usage and documentation please see the related blog article at:
 
-(http://rupertanderson.com/blog/replace-request-teststeps-plugin/)
+([http://rupz.me/blog/replace-request-teststeps-plugin/](https://rupz.me/soapui-plugins/replace-teststep-request-soapui-plugin/)
 
 ###Installation
 
